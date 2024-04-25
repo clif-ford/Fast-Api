@@ -39,7 +39,7 @@ def predict_digit(model, data_point: List[float]) -> str:
 
 
 def format_image(image_file):
-    image = img.resize((28, 28))
+    image = image_file.resize((28, 28))
     return image
 
 
