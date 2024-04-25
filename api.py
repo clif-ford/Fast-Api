@@ -5,10 +5,11 @@ import numpy as np
 from mlflow.keras import load_model
 from PIL import Image
 from datetime import datetime
+import os
 
 
 app = FastAPI()
-model_path='/home/clifford/clifford/clifflearns/insti/CS5830/a05/mlartifacts/0/d4c4cb9b38a54efba1a951de551e2d37/artifacts/model'
+model_path='/home/clifford/clifford/clifflearns/insti/CS5830/a05/mlartifacts/0/077185e74e6749c0890479ff9e473523/artifacts/model'
 
 def load__model(path: str):
     """
@@ -39,8 +40,7 @@ def predict_digit(model, data_point: List[float]) -> str:
 
 
 def format_image(image_file):
-    image = image_file.resize((28, 28))
-    return image
+    return image_file.resize((28, 28))
 
 
 
@@ -66,13 +66,16 @@ async def predict(file: UploadFile = File(...)):
     # Load the model
 
     model = load__model(model_path)
-
+    model.trainable=False
     # Convert image to serialized array of 784 elements
     # Perform image processing and convert to numpy array
+    
     img = Image.open(f"/home/clifford/clifford/clifflearns/insti/CS5830/a06/uploaded_images/uploaded_image_{formatted_datetime}.jpg")
     img = img.convert('L')
     if img.size!=(28,28):
         img = format_image(img)
+        img.save(f"/home/clifford/clifford/clifflearns/insti/CS5830/a06/uploaded_images/uploaded_image_{formatted_datetime}.jpg")
+    img = Image.open(f"/home/clifford/clifford/clifflearns/insti/CS5830/a06/uploaded_images/uploaded_image_{formatted_datetime}.jpg")
     img_array = np.array(img)
     flattened_array = img_array.reshape(-1)
     flattened_array=flattened_array.astype('float32')
